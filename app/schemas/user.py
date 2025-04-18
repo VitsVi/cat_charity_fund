@@ -1,13 +1,12 @@
-from fastapi_users.schemas import BaseUser
+from fastapi_users import schemas
 
-
-class UserRead(BaseUser[int]):
+class UserRead(schemas.BaseUser[int]):
     pass
 
 
-class UserCreate(BaseUser[int]):
+class UserCreate(schemas.BaseUserCreate):
     pass
 
 
-class UserUpdate(BaseUser[int]):
+class UserUpdate(schemas.BaseUserUpdate):
     pass

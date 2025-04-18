@@ -18,5 +18,7 @@ class CharityProjectCRUD(CRUDBase):
             )
         )
         return db_project_id.scalars().first()
+    
+    
 
 charity_project_crud = CharityProjectCRUD(CharityProject)
