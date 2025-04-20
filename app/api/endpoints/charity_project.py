@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.validators import (check_close_project, check_project_donations,
                                 check_project_exists,
                                 check_project_name_duplicate,
-                                update_project_amount_more_than_invested)
+                                update_project_full_invested)
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud import charity_project_crud
@@ -67,7 +67,7 @@ async def partially_update_project(
     await check_close_project(project)  # Проверка закрытого проекта.
 
     # Проверка валидности требуемой суммы проекта.
-    await update_project_amount_more_than_invested(project, obj_in)
+    await update_project_full_invested(project, obj_in)
 
     project = await charity_project_crud.update(
         project, obj_in, session

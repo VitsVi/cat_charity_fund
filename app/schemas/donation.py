@@ -37,10 +37,11 @@ class DonationUserDB(DonationBase):
 
 class DonationAdminDB(DonationBase):
     id: int
+    user_id: int
     invested_amount: int
     fully_invested: bool
     create_date: datetime
-    close_date: datetime
+    close_date: Optional[datetime]
 
     class Config:
         orm_mode = True

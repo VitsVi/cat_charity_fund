@@ -37,6 +37,7 @@ class CharityProjectUpdate(CharityProjectBase):
     )
     description: Optional[str] = Field(None, min_length=1)
     full_amount: Optional[int]
+    invested_amount: Optional[int]
 
 
 class CharityProjectDB(CharityProjectCreate):

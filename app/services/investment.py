@@ -62,7 +62,7 @@ class Investment:
                     donation.fully_invested = True
                     donation.close_date = dt.now(tz.utc)
 
-                elif project.full_amount == project.invested_amount:
+                if project.full_amount == project.invested_amount:
                     project.fully_invested = True
                     project.close_date = dt.now(tz.utc)
                     break

@@ -3,6 +3,9 @@ from http import HTTPStatus
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from datetime import datetime as dt
+from datetime import timezone as tz
+
 from app.crud import charity_project_crud
 from app.models import CharityProject
 from app.schemas.charity_project import CharityProjectUpdate
@@ -50,10 +53,10 @@ async def check_project_donations(
         )
 
 
-async def update_project_amount_more_than_invested(
+async def update_project_full_invested(
         new_data: CharityProjectUpdate,
         old_data: CharityProject,
-) -> None:
+) -> CharityProject:
     if new_data.full_amount < old_data.invested_amount:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
@@ -62,6 +65,7 @@ async def update_project_amount_more_than_invested(
                 'не может быть меньше уже вложенной суммы.'
             )
         )
+    
 
 
 async def check_close_project(

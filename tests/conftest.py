@@ -1,11 +1,16 @@
 from pathlib import Path
-
+import sys
+import os
 import pytest
 import pytest_asyncio
 from mixer.backend.sqlalchemy import Mixer as _mixer
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+
+sys.path.insert(0, os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..')
+))
 
 try:
     from app.main import app  # noqa
