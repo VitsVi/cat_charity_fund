@@ -10,7 +10,7 @@ class CharityProjectBase(BaseModel):
     full_amount: int
 
     @field_validator('full_amount')
-    def check_amount_more_zero(self, value):
+    def check_amount_more_zero(cls, value):
         if value < 1:
             raise ValueError('Требуемая сумма сбора должна быть больше 0.')
         return value
