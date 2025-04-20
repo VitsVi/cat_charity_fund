@@ -1,5 +1,6 @@
 from datetime import datetime as dt
 from datetime import timezone as tz
+from typing import Union
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -75,7 +76,7 @@ class Investment:
 
     async def main(
             self,
-            object: CharityProject | Donation,
+            object: Union[CharityProject, Donation],
             session: AsyncSession
     ):
         await self.get_open_donations(session)
