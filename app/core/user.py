@@ -1,16 +1,10 @@
 from typing import Optional, Union
+
 from fastapi import Depends, Request
-from fastapi_users import (
-    BaseUserManager,
-    FastAPIUsers,
-    IntegerIDMixin,
-    InvalidPasswordException
-)
-from fastapi_users.authentication import (
-    AuthenticationBackend,
-    BearerTransport,
-    JWTStrategy
-)
+from fastapi_users import (BaseUserManager, FastAPIUsers, IntegerIDMixin,
+                           InvalidPasswordException)
+from fastapi_users.authentication import (AuthenticationBackend,
+                                          BearerTransport, JWTStrategy)
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -27,8 +21,10 @@ async def get_user_db(
 
 bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
 
+
 def get_jwt_strategy() -> JWTStrategy:
     return JWTStrategy(secret=settings.secret, lifetime_seconds=3600)
+
 
 auth_backend = AuthenticationBackend(
     name='jwt',
@@ -38,7 +34,8 @@ auth_backend = AuthenticationBackend(
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
-    '''Класс управления учетными записями.'''
+    """Класс управления учетными записями."""
+
     async def validate_password(
             self,
             password: str,
@@ -52,7 +49,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
             raise InvalidPasswordException(
                 reason='Пароль не может содержать электронную почту.'
             )
-        
+
     async def on_after_register(
             self,
             user: User,

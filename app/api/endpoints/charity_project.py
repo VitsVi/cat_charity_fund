@@ -1,22 +1,17 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.db import get_async_session
-from app.crud import charity_project_crud
-from app.models import CharityProject
-from app.schemas.charity_project import(
-    CharityProjectCreate,
-    CharityProjectUpdate,
-    CharityProjectDB
-)
-from app.core.user import current_user, current_superuser
-from app.api.validators import (
-    check_project_name_duplicate,
-    check_project_exists,
-    check_project_donations,
-    update_project_amount_more_than_invested,
-    check_close_project,
-)
 
+from app.api.validators import (check_close_project, check_project_donations,
+                                check_project_exists,
+                                check_project_name_duplicate,
+                                update_project_amount_more_than_invested)
+from app.core.db import get_async_session
+from app.core.user import current_superuser
+from app.crud import charity_project_crud
+from app.schemas.charity_project import (CharityProjectCreate,
+                                         CharityProjectDB,
+                                         CharityProjectUpdate)
+from app.services.investment import investment
 
 router = APIRouter()
 
@@ -31,11 +26,13 @@ async def create_new_project(
     project: CharityProjectCreate,
     session: AsyncSession = Depends(get_async_session)
 ):
-    '''Создание новых проектов в фонде, только для админа.'''
-
+    """Создание новых проектов в фонде, только для админа."""
     await check_project_name_duplicate(project.name, session)
     new_project = await charity_project_crud.create(project, session)
+    await investment.main(new_project, session)
+    await session.refresh(new_project)
     return new_project
+
 
 @router.get(
     '/',
@@ -45,8 +42,7 @@ async def create_new_project(
 async def get_all_projects(
     session: AsyncSession = Depends(get_async_session)
 ):
-    '''Просмотр всех проектов в фонде, без ограничений.'''
-
+    """Просмотр всех проектов в фонде, без ограничений."""
     all_projects = await charity_project_crud.get_multi(session)
     return all_projects
 
@@ -62,14 +58,13 @@ async def partially_update_project(
     obj_in: CharityProjectUpdate,
     session: AsyncSession = Depends(get_async_session)
 ):
-    '''Изменение параметров проекта.'''
-
+    """Изменение полей проекта."""
     project = await check_project_exists(project_id, session)
 
     if obj_in.name is not None:
         await check_project_name_duplicate(obj_in.name, session)
 
-    await check_close_project(project) # Проверка закрытого проекта.
+    await check_close_project(project)  # Проверка закрытого проекта.
 
     # Проверка валидности требуемой суммы проекта.
     await update_project_amount_more_than_invested(project, obj_in)
@@ -79,6 +74,7 @@ async def partially_update_project(
     )
     return project
 
+
 @router.delete(
     '/{project_id}',
     dependencies=[Depends(current_superuser)]
@@ -87,11 +83,11 @@ async def remove_project(
     project_id: int,
     session: AsyncSession = Depends(get_async_session)
 ):
-    '''Удаление проекта.'''
+    """Удаление проекта."""
     project = await check_project_exists(project_id, session)
     # Проверка наличия пожертвований в проекте.
     await check_project_donations(project_id, session)
 
-    await check_close_project(project) # Проверка закрытого проекта.
+    await check_close_project(project)  # Проверка закрытого проекта.
     project = await charity_project_crud.remove(project, session)
     return project

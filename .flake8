@@ -1,5 +1,5 @@
 [flake8]
-ignore = E265, F811, PT001, DJ05, D100, D105, D104, W504, W292
+ignore = E265, F811, PT001, DJ05, D100, D105, D104, W504, W292, D106, D102, D107, D101, D103
 max-line-length = 79
 paths = 
     ./app

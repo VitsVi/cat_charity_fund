@@ -1,12 +1,14 @@
-from sqlalchemy import Column, Integer, DateTime, Boolean, func, CheckConstraint
+from sqlalchemy import (Boolean, CheckConstraint, Column, DateTime, Integer,
+                        func)
 
 
 class ProjectDonationMixin:
-    '''Миксин для расширения таблиц проекта и доната.'''
+    """Миксин для расширения таблиц проекта и доната."""
+
     __abstract__ = True
 
     full_amount = Column(Integer, nullable=False)
-    invest_amount = Column(Integer, nullable=False, default=0)
+    invested_amount = Column(Integer, nullable=False, default=0)
     fully_invested = Column(Boolean, default=False)
     create_date = Column(DateTime, default=func.now())
     close_date = Column(DateTime, nullable=True)

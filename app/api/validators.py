@@ -1,9 +1,12 @@
+from http import HTTPStatus
+
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.crud import charity_project_crud, donation_crud
-from app.models import CharityProject, Donation, User
-from http import HTTPStatus
+
+from app.crud import charity_project_crud
+from app.models import CharityProject
 from app.schemas.charity_project import CharityProjectUpdate
+
 
 async def check_project_name_duplicate(
         project_name: str,
@@ -17,7 +20,7 @@ async def check_project_name_duplicate(
             status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
             detail='Проект с таким именем уже существует.'
         )
-    
+
 
 async def check_project_exists(
         project_id: int,
@@ -31,12 +34,13 @@ async def check_project_exists(
         )
     return project
 
+
 async def check_project_donations(
         project_id: int,
         session: AsyncSession
 ) -> None:
     project = await charity_project_crud.get(project_id, session)
-    if project.invest_amount > 0:
+    if project.invested_amount > 0:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
             detail=(
@@ -44,12 +48,13 @@ async def check_project_donations(
                 'который уже были вложены средства.'
             )
         )
-    
+
+
 async def update_project_amount_more_than_invested(
         new_data: CharityProjectUpdate,
         old_data: CharityProject,
 ) -> None:
-    if new_data.full_amount < old_data.invest_amount:
+    if new_data.full_amount < old_data.invested_amount:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
             detail=(
@@ -57,7 +62,8 @@ async def update_project_amount_more_than_invested(
                 'не может быть меньше уже вложенной суммы.'
             )
         )
-    
+
+
 async def check_close_project(
         old_data: CharityProject
 ) -> None:

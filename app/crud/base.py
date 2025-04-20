@@ -1,7 +1,9 @@
+from typing import Optional
+
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Optional
+
 from app.models import User
 
 
@@ -18,7 +20,7 @@ class CRUDBase:
             select(self.model).where(self.model.id == obj_id)
         )
         return db_obj.scalars().first()
-    
+
     async def get_multi(
             self,
             session: AsyncSession
@@ -27,7 +29,7 @@ class CRUDBase:
             select(self.model)
         )
         return db_obj.scalars().all()
-    
+
     async def create(
             self,
             obj_in,
@@ -42,7 +44,7 @@ class CRUDBase:
         await session.commit()
         await session.refresh(db_obj)
         return db_obj
-    
+
     async def update(
             self,
             db_obj,
@@ -58,7 +60,7 @@ class CRUDBase:
         await session.commit()
         await session.refresh(db_obj)
         return db_obj
-    
+
     async def remove(
             self,
             db_obj,
