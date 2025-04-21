@@ -67,8 +67,7 @@ async def partially_update_project(
     await check_close_project(project)  # Проверка закрытого проекта.
 
     # Проверка валидности требуемой суммы проекта.
-    await update_project_full_invested(project, obj_in)
-
+    project = await update_project_full_invested(project, obj_in)
     project = await charity_project_crud.update(
         project, obj_in, session
     )

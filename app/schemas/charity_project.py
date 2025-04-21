@@ -11,7 +11,7 @@ class CharityProjectBase(BaseModel):
 
     @field_validator('full_amount')
     def check_amount_more_zero(cls, value):
-        if value < 1:
+        if value is not None and value < 1:
             raise ValueError('Требуемая сумма сбора должна быть больше 0.')
         return value
 
@@ -37,7 +37,6 @@ class CharityProjectUpdate(CharityProjectBase):
     )
     description: Optional[str] = Field(None, min_length=1)
     full_amount: Optional[int]
-    invested_amount: Optional[int]
 
 
 class CharityProjectDB(CharityProjectCreate):
