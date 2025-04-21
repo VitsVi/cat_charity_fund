@@ -20,7 +20,7 @@ class Investment:
     ):
         donations = await session.execute(
             select(Donation)
-            .where(Donation.fully_invested is False)
+            .where(Donation.fully_invested.is_(False))
             .order_by(Donation.create_date)
         )
         self.donations = donations.scalars().all()
@@ -31,7 +31,7 @@ class Investment:
     ):
         projects = await session.execute(
             select(CharityProject)
-            .where(CharityProject.fully_invested is False)
+            .where(CharityProject.fully_invested.is_(False))
             .order_by(CharityProject.create_date)
         )
         self.projects = projects.scalars().all()
@@ -48,11 +48,9 @@ class Investment:
     async def investition(self):
         for project in self.projects:
             for donation in self.donations:
-
                 invest_remain = donation.full_amount - donation.invested_amount
                 project_need_invest = \
                     project.full_amount - project.invested_amount
-
                 invest_amount = min(invest_remain, project_need_invest)
 
                 project.invested_amount += invest_amount

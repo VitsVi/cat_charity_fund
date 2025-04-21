@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class DonationBase(BaseModel):
-    comment: Optional[str]
+    comment: Optional[str] = None
     full_amount: int = Field(..., gt=0)
 
     @field_validator('full_amount')

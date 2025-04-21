@@ -23,6 +23,7 @@ class CharityProjectBase(BaseModel):
                 "full_amount": 100000
             }
         }
+        extra = 'forbid'
 
 
 class CharityProjectCreate(CharityProjectBase):
@@ -36,7 +37,7 @@ class CharityProjectUpdate(CharityProjectBase):
         max_length=100
     )
     description: Optional[str] = Field(None, min_length=1)
-    full_amount: Optional[int]
+    full_amount: Optional[int] = None
 
 
 class CharityProjectDB(CharityProjectCreate):
