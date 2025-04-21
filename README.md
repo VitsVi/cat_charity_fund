@@ -1,3 +1,9 @@
+# 🐾 QR Kot
+
+Благотворительный фонд поддержки котиков.
+
+---
+
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/-FastAPI-464646?style=flat&logo=FastAPI&logoColor=white&color=009688)](https://fastapi.tiangolo.com/)
 [![SQLAlchemy](https://img.shields.io/badge/-SQLAlchemy-464646?style=flat&logo=SQLAlchemy&logoColor=red&color=800000)](https://www.sqlalchemy.org/)
@@ -10,12 +16,6 @@
 [![Flake8](https://img.shields.io/badge/-Flake8-464646?style=flat&logo=flake8&logoColor=white&color=4B0082)](https://flake8.pycqa.org/)
 [![Isort](https://img.shields.io/badge/-Isort-464646?style=flat&logo=python&logoColor=white&color=708090)](https://pycqa.github.io/isort/)
 [![Dotenv](https://img.shields.io/badge/-python__dotenv-464646?style=flat&logo=python-dotenv&logoColor=white&color=2E8B57)](https://pypi.org/project/python-dotenv/)
-
-# 🐾 QR Kot
-
-Благотворительный фонд поддержки котиков.
-
----
 
 ## Описание
 
@@ -69,7 +69,7 @@ uvicorn app.main:app --reload
 http://127.0.0.1:8000/docs
 ```
 
-### Автор
+### Автор проекта
 
 [VitsVi](https://github.com/VitsVi)
 
