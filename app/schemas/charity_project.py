@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field, field_validator
 class CharityProjectBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
     description: str = Field(..., min_length=1)
-    full_amount: int
+    full_amount: int = Field(..., gt=0)
 
     @field_validator('full_amount')
     def check_amount_more_zero(cls, value):

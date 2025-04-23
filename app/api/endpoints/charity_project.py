@@ -3,15 +3,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.validators import (check_close_project, check_project_donations,
                                 check_project_exists,
-                                check_project_name_duplicate,
-                                update_project_full_invested)
+                                check_project_name_duplicate)
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud import charity_project_crud
 from app.schemas.charity_project import (CharityProjectCreate,
                                          CharityProjectDB,
                                          CharityProjectUpdate)
-from app.services.investment import investment
+from app.services.charity_project import (
+    create_charity_project_logic,
+    update_charity_project_logic
+)
 
 router = APIRouter()
 
@@ -28,10 +30,7 @@ async def create_new_project(
 ):
     """Создание новых проектов в фонде, только для админа."""
     await check_project_name_duplicate(project.name, session)
-    new_project = await charity_project_crud.create(project, session)
-    await investment.main(new_project, session)
-    await session.refresh(new_project)
-    return new_project
+    return await create_charity_project_logic(project, session)
 
 
 @router.get(
@@ -65,14 +64,7 @@ async def partially_update_project(
         await check_project_name_duplicate(obj_in.name, session)
 
     await check_close_project(project)  # Проверка закрытого проекта.
-
-    if obj_in.full_amount is not None:
-        # Проверка валидности требуемой суммы проекта.
-        project = await update_project_full_invested(project, obj_in)
-    project = await charity_project_crud.update(
-        project, obj_in, session
-    )
-    return project
+    return await update_charity_project_logic(project, obj_in, session)
 
 
 @router.delete(
